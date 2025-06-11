@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Estado de la Red</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body class="status-body">
+    <div class="status-container">
+        <h2>Estado de la Conexión</h2>
+        <p id="status-message">Probando conexión...</p>
+        <button onclick="window.location.href='/'">⬅️ Volver al Chat</button>
+    </div>
+
+    <script>
+        fetch("/api/status")
+            .then(response => response.json())
+            .then(data => {
+                const msgBox = document.getElementById("status-message");
+                msgBox.textContent = data.message;
+                msgBox.className = data.ok ? "status-ok" : "status-fail";
+            })
+            .catch(() => {
+                document.getElementById("status-message").textContent = "Error de conexion.";
+            });
+    </script>
+</body>
+
+</html>

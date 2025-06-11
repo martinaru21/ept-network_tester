@@ -1,96 +1,130 @@
-# Network Tester Chat App (Python + Flask-SocketIO)
+# 🔧 Network Chat Tester
 
-This project turns your Mini PC into a live interactive LAN-based chat system for demos, like career fairs or classroom workshops.
+A simple network chat + status checker built with Flask and Flask-SocketIO. Designed for testing local connections between multiple devices.
 
-It includes:
-- A Flask app with a SocketIO-powered WebSocket server
-- A Material Design-inspired chat UI using HTML, JS, and CSS
-- A simulated network connectivity check via a TCP socket
+## ✅ Features
+
+-   Real-time chat via WebSockets (Socket.IO)
+-   Username prompt (saved in local storage)
+-   Switch status check via `/status`
+-   Responsive UI for desktop and mobile
 
 ---
 
-## 🔧 Installation Guide (Ubuntu Mini PC)
+## 💻 Requirements
 
-### 1. Update System
+-   Python 3.9+
+-   pip
+-   (Recommended) Virtual environment
+
+---
+
+## 📦 Installation
+
+### 1. Clone the repository
+
 ```bash
-sudo apt update && sudo apt upgrade -y
+git clone https://github.com/your-username/network-tester.git
+cd network-tester
 ```
 
-### 2. Install Python & Tools
-```bash
-sudo apt install python3 python3-pip python3-venv -y
-```
+### 2. Create and activate a virtual environment
 
-### 3. Unzip or Clone the Project
-```bash
-unzip network_tester_chat.zip
-cd network_tester_chat
-```
-
-### 4. Set Up Virtual Environment
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 5. Install Required Python Packages
+### 3. Install dependencies
+
 ```bash
-pip install flask flask-socketio eventlet
+pip install -r requirements.txt
 ```
 
-### 6. Run the App
+If `requirements.txt` is missing, use:
+
+```bash
+pip install flask flask-socketio
+```
+
+---
+
+## 🚀 Running the app
+
 ```bash
 python app.py
 ```
 
-### 7. Find Local IP (to connect other devices)
+This will:
+
+-   Start the Flask + SocketIO chat server on `http://<ip>:5000`
+-   Start a background TCP socket server on port `12345` for switch status
+
+---
+
+## 🌐 Accessing the app
+
+### On the server machine:
+
+-   Open `http://localhost:5000` in a browser
+
+### From other devices (clients):
+
+1. Make sure all devices are connected to the same local network.
+2. Get the IP of the server machine:
+
 ```bash
-hostname -I
+ip a
 ```
 
-Use this IP to access the chat from other devices:
-```
-http://<your-ip>:5000
-```
+3. Open in browser:
 
-### 8. (Optional) Open Firewall Ports
-```bash
-sudo ufw allow 5000
-sudo ufw allow 12345
+```
+http://<SERVER_IP>:5000
 ```
 
 ---
 
-## ✅ Features
-
-- Real-time LAN chat via WebSockets
-- Material Design chat UI
-- TCP-based switch connection check
-- Works across PCs and phones on same network
-
----
-
-## 🧠 Future Ideas
-
-- Add usernames
-- Per-device chat rooms
-- Server logs of activity
-- Exportable message history
-
----
-
-## 📁 Folder Structure
+## 🔄 Files and Structure
 
 ```
-network_tester_chat/
-├── app.py
+network-tester/
+├── app.py               # Main Flask + socket server
 ├── static/
-│   ├── index.html
-│   ├── script.js
-│   └── style.css
-└── venv/ (created locally)
+│   ├── index.html       # Chat UI
+│   ├── status.html      # Network status page
+│   ├── script.js        # Frontend logic
+│   └── style.css        # Custom styles
+└── requirements.txt     # Python dependencies
 ```
 
 ---
 
-Happy chatting!
+## 🧪 Testing
+
+-   On browser, enter a username when prompted
+-   Chat in real time across multiple devices
+-   Click "Test Network Status" to check switch connection via TCP
+
+---
+
+## 🛑 Common Issues
+
+-   **Port already in use:** Run `lsof -i :12345` or `:5000` and kill the blocking process.
+-   **Firewall blocks:** Make sure port 5000 and 12345 are open on the server.
+-   **CORS errors:** Avoid HTTPS if you're running locally.
+
+---
+
+## 📦 To add dependencies later
+
+```bash
+pip install <package-name>
+pip freeze > requirements.txt
+```
+
+---
+
+## 📜 License
+
+FACET License © Martina Rubio
