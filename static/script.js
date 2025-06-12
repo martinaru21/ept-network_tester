@@ -40,25 +40,30 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.emit("join", { username });
 
     socket.on("chat_message", ({ sender, msg }) => {
-        const type =
-            sender === username
-                ? "user"
-                : sender === "Server"
-                  ? "server"
-                  : "other";
-        addMessage(sender, msg, type);
+        // Only show message if it's not from the current user
+        if (sender !== username) {
+            const type = sender === "Server" ? "server" : "other";
+            addMessage(sender, msg, type);
+        }
     });
 
-    button.addEventListener("click", () => {
+    function sendMessage() {
         const msg = input.value.trim();
         if (!msg) return;
 
+        // Only add locally
         addMessage(username, msg, "user");
-        socket.emit("chat_message", {
-            sender: username,
-            msg: msg,
-        });
-
+        socket.emit("chat_message", { sender: username, msg });
         input.value = "";
+    }
+
+    // Button fallback (optional)
+    button.addEventListener("click", sendMessage);
+
+    // Send on Enter key
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
     });
 });
