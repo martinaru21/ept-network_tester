@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("test-button");
     const input = document.getElementById("chat-input");
 
-    let username = localStorage.getItem("username") || "";
+    let username = "";
 
     function addMessage(sender, text, type) {
         const container = document.createElement("div");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         while (!username) {
             username = prompt("Ingresa tu nombre de usuario:");
             if (username && username.trim().length > 0) {
-                localStorage.setItem("username", username);
+                username = username.trim();
             } else {
                 username = "";
             }
@@ -36,11 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
     askUsername();
 
     const socket = io();
-
     socket.emit("join", { username });
 
     socket.on("chat_message", ({ sender, msg }) => {
-        // Only show message if it's not from the current user
         if (sender !== username) {
             const type = sender === "Server" ? "server" : "other";
             addMessage(sender, msg, type);
@@ -51,16 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const msg = input.value.trim();
         if (!msg) return;
 
-        // Only add locally
         addMessage(username, msg, "user");
         socket.emit("chat_message", { sender: username, msg });
         input.value = "";
     }
 
-    // Button fallback (optional)
     button.addEventListener("click", sendMessage);
 
-    // Send on Enter key
     input.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             sendMessage();
